@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator, ScrollView, StatusBar } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Image, ActivityIndicator, ScrollView, StatusBar, TouchableOpacity, BackHandler } from 'react-native';
 import apiService from '../../API/apiService';
 
 interface RecipeDetailsProps {
+
     route: {
         params: {
             idMeal: string;
@@ -10,10 +11,16 @@ interface RecipeDetailsProps {
     };
 }
 
+
+
 const RecipeDetails: React.FC<RecipeDetailsProps> = ({ route }) => {
     const { idMeal } = route.params;
     const [recipeDetails, setRecipeDetails] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const scrollViewRef = useRef<ScrollView>(null);
+    const [scrollPosition, setScrollPosition] = useState<number>(0);
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+
 
     useEffect(() => {
         const fetchRecipeDetails = async () => {
@@ -32,31 +39,58 @@ const RecipeDetails: React.FC<RecipeDetailsProps> = ({ route }) => {
         fetchRecipeDetails();
     }, [idMeal]);
 
-    if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-        );
-    }
+    const handleScroll = (event: any) => {
+        const { y } = event.nativeEvent.contentOffset;
+        setScrollPosition(y);
+    };
 
-    if (!recipeDetails) {
-        return (
-            <View style={styles.errorContainer}>
-                <Text>Error fetching recipe details. Please try again later.</Text>
-            </View>
-        );
-    }
+    const handleImagePress = async () => {
+
+    };
+
+
 
     return (
         <View style={styles.container}>
-            <StatusBar translucent backgroundColor="transparent" barStyle={'light-content'} />
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Image source={{ uri: recipeDetails.strMealThumb }} style={styles.recipeImage} />
-                <Text style={styles.recipeName}>{recipeDetails.strMeal}</Text>
-                <Text style={styles.category}>Category: {recipeDetails.strCategory}</Text>
-                <Text style={styles.instructions}>{recipeDetails.strInstructions}</Text>
-            </ScrollView>
+            <StatusBar
+                translucent
+                backgroundColor={scrollPosition >= 350 ? '#FFFFFF' : 'transparent'}
+                barStyle={'dark-content'}
+            />
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+            ) : !recipeDetails ? (
+                <View style={styles.errorContainer}>
+                    <Text>Error fetching recipe details. Please try again later.</Text>
+                </View>
+            ) : (
+                <>
+                    <ScrollView
+                        ref={scrollViewRef}
+                        showsVerticalScrollIndicator={false}
+                        onScroll={handleScroll}
+                        scrollEventThrottle={16}
+                    >
+                        <Image source={{ uri: recipeDetails.strMealThumb }} style={styles.recipeImage} />
+                        <View style={styles.recipe}>
+                            <Text style={styles.recipeName}>{recipeDetails.strMeal}</Text>
+                            <Text style={styles.title}>Category: </Text>
+                            <Text style={styles.category}>{recipeDetails.strCategory}</Text>
+                            <Text style={styles.title}>Instruction: </Text>
+                            <Text style={styles.instructions}>{recipeDetails.strInstructions}</Text>
+                        </View>
+                        <TouchableOpacity style={styles.touchableImageContainer} onPress={handleImagePress}>
+
+                            <Image
+                                source={require('../../assets/nav/Bookmark.png')}
+                                style={[styles.touchableImage, { tintColor: isBookmarked ? '#FB9400' : '#666' }]}
+                            />
+                        </TouchableOpacity>
+                    </ScrollView>
+                </>
+            )}
         </View>
     );
 };
@@ -82,17 +116,48 @@ const styles = StyleSheet.create({
         height: 350,
         marginBottom: 10,
     },
+    recipe: {
+        padding: 24,
+    },
     recipeName: {
-        fontSize: 24,
+        fontSize: 18,
+        lineHeight: 22,
+        color: '#0F172A',
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    category: {
+    title: {
+        color: '#0F172A',
         fontSize: 16,
+        fontWeight: '600',
+        lineHeight: 22,
+        marginVertical: 10,
+    },
+    category: {
+        fontSize: 14,
         marginBottom: 10,
+        color: '#64748B',
+        fontWeight: '400',
     },
     instructions: {
-        fontSize: 16,
+        fontSize: 14,
+        color: '#64748B',
+        fontWeight: '400',
+    },
+    touchableImageContainer: {
+        position: 'absolute',
+        top: 45,
+        right: 20,
+        zIndex: 10,
+        backgroundColor: '#FFF',
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    touchableImage: {
+        resizeMode: 'contain',
     },
 });
 
