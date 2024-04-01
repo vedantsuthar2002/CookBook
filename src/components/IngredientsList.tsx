@@ -22,6 +22,7 @@ const IngredientsList: React.FC<IngredientsListProps> = ({ ingredients, onPressA
         <View key={index} style={styles.ingredientRow}>
           <TextInput
             style={styles.input}
+            placeholderTextColor={'#000'}
             placeholder="Ingredient"
             value={ingredient.name}
             onChangeText={(text) => onHandle(text, index)}
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: 'white',
     width: '80%',
-    borderColor: '#E8E8E8',
+    borderColor: '#000',
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,

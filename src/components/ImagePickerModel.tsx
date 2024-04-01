@@ -93,16 +93,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingVertical: 50,
         backgroundColor: '#FFF',
-        borderColor: '#E8E8E8',
         borderWidth: 1,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
+        borderColor: '#000',
 
     },
     optionText: {
         fontSize: 16,
-        color: '#9CA3AF',
+        color: '#000',
     },
     modalContainer: {
         flex: 1,

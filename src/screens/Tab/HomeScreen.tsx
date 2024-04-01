@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, TouchableOpacity, StatusBar, TextInput, 
 import Emoji from 'react-native-emoji';
 import apiService from '../../API/apiService';
 import { useNavigation } from '@react-navigation/native';
-import RecipeDetails from './RecipeDetailsScreen';
+
 
 interface Meal {
     idMeal: string;
@@ -50,7 +50,7 @@ const HomeScreen: React.FC = () => {
         if (dropdownRef.current) {
             const height = 91 * searchResults.length;
             dropdownRef.current.setNativeProps({
-                style: { height: height > 533 ? 533 : height }
+                style: { height: height > 540 ? 540 : height }
             });
         }
     }, [searchResults]);
@@ -179,7 +179,7 @@ const HomeScreen: React.FC = () => {
                     )}
 
                     {/* Random recipes */}
-                    <Text style={styles.rendomTitle}> Special Recipe</Text>
+                    <Text style={styles.randomTitle}> Special Recipe</Text>
                     <View style={styles.randomRecipesList}>
                         {loading ? (
                             <ActivityIndicator size="large" color="#0000ff" />
@@ -263,7 +263,9 @@ const styles = StyleSheet.create({
     root: {
         backgroundColor: '#FFF',
         flex: 1,
-        padding: 20,
+        paddingRight: 15,
+        paddingTop: 15,
+        paddingLeft: 15,
     },
     header: {
         width: '100%',
@@ -333,19 +335,19 @@ const styles = StyleSheet.create({
         width: 20,
         alignItems: "center",
     },
-    flatList: {
-        marginTop: 20,
-    },
     mealItem: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
+        height: 70,
     },
     mealImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: 65,
+        height: 70,
         marginRight: 10,
+
+        borderTopLeftRadius: 8,
+        borderBottomLeftRadius: 8,
     },
     mealName: {
         fontSize: 16,
@@ -357,9 +359,9 @@ const styles = StyleSheet.create({
         top: 130,
         left: 0,
         right: 0,
-        backgroundColor: '#FFF',
+        backgroundColor: '#FFFFFF',
         zIndex: 1,
-        maxHeight: 600,
+        maxHeight: 610,
     },
     dropdownContainerOpacity: {
         opacity: 0.5,
@@ -367,12 +369,11 @@ const styles = StyleSheet.create({
     dropdownItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#F4F5F6',
+        backgroundColor: '#FFF',
+        height: 70,
+        marginBottom: 10,
     },
-    rendomTitle: {
+    randomTitle: {
         fontSize: 18,
         color: '#000',
         fontWeight: '600',
@@ -417,7 +418,6 @@ const styles = StyleSheet.create({
     },
     CategoryScrollViewStyle: {
         height: 75,
-        marginVertical: 0,
     },
     categoryScroll: {
         alignItems: 'center',
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
-        paddingHorizontal: 10,
+        paddingHorizontal: 5,
         marginTop: 10,
     },
 
@@ -455,7 +455,8 @@ const styles = StyleSheet.create({
     categoryRecipeImage: {
         width: '95%',
         aspectRatio: 3 / 4,
-        borderRadius: 10,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         left: 3,
