@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, StatusBar, TextInput, FlatList, ListRenderItem, ActivityIndicator, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, StatusBar, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import Emoji from 'react-native-emoji';
 import apiService from '../../API/apiService';
 import { useNavigation } from '@react-navigation/native';
@@ -194,9 +194,9 @@ const HomeScreen: React.FC = () => {
                                     <Image source={{ uri: item.strMealThumb }} style={styles.randomRecipeImage} />
                                     <View style={styles.randomRecipeDetails}>
                                         <Text style={styles.recipeName}>{item.strMeal}</Text>
-                                        <View style={styles.recipeInfo}>
-                                            <Text style={styles.recipeInfoText}>Portion: 4</Text>
-                                            <Text style={styles.recipeInfoText}><Emoji name='clock330' />: 30 mins</Text>
+                                        <View style={styles.randomrecipeInfo}>
+                                            <Text style={styles.recipeInfoText}><Emoji name='star' />(4.5)</Text>
+                                            <Text style={styles.recipeInfoText}><Emoji name='clock330' />30 mins</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -233,15 +233,15 @@ const HomeScreen: React.FC = () => {
                             {filteredRecipes.map((item, index) => (
                                 <TouchableOpacity
                                     key={item.idMeal}
-                                    style={[styles.caregotyRecipeItemContainer, index % 2 !== 0 && { marginLeft: 10 }]}
+                                    style={[styles.caregotyRecipeItemContainer, styles.shadowProp, index % 2 !== 0 && { marginLeft: 10 }]}
                                     onPress={() => navigation.navigate('RecipeDetails', { idMeal: item.idMeal })}
                                 >
                                     <Image source={{ uri: item.strMealThumb }} style={styles.categoryRecipeImage} />
-                                    <View style={styles.randomRecipeDetails}>
+                                    <View style={styles.RecipeDetails}>
                                         <Text numberOfLines={2} style={styles.recipeName}>{item.strMeal}</Text>
                                         <View style={styles.recipeInfo}>
-                                            <Text style={styles.recipeInfoText}>Portion: 4</Text>
-                                            <Text style={styles.recipeInfoText}><Emoji name='clock330' />: 30 mins</Text>
+                                            <Text style={styles.recipeInfoText}><Emoji name='star' />(4.5)</Text>
+                                            <Text style={styles.recipeInfoText}><Emoji name='clock330' />30 mins</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -399,19 +399,29 @@ const styles = StyleSheet.create({
     randomRecipeDetails: {
         marginVertical: 10,
         paddingHorizontal: 5,
+        flexDirection: 'column',
     },
     recipeName: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
+        paddingLeft: 5,
+        marginBottom: 5
+    },
+    randomrecipeInfo: {
+        marginVertical: 10
     },
     recipeInfo: {
-        flexDirection: 'column',
+        paddingHorizontal: 5,
+        flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 5,
+        bottom: 0
     },
     recipeInfoText: {
-        fontSize: 14,
+        fontSize: 13,
+        bottom: 0,
+        marginBottom: 10,
     },
     scrollView: {
         maxHeight: 600,
@@ -435,7 +445,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: 'rgba(00, 00, 00, 0.30)',
         width: '100%',
-
         color: '#FFF',
         borderRadius: 20,
         paddingVertical: 8,
@@ -449,8 +458,18 @@ const styles = StyleSheet.create({
     },
 
     caregotyRecipeItemContainer: {
+        borderRadius: 10,
         width: '48%',
         marginBottom: 10,
+        backgroundColor: '#fff',
+    },
+    RecipeDetails: {
+        alignContent: 'space-between',
+        paddingVertical: 5,
+    },
+    shadowProp: {
+        shadowColor: '#000',
+        elevation: 3,
     },
     categoryRecipeImage: {
         width: '95%',

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import CustomButton from '../../components/CustomButton';
 
 const ProfileScreen = () => {
     const handleEditProfile = () => {
@@ -12,25 +13,41 @@ const ProfileScreen = () => {
         console.log('Logging out');
     };
 
+    const handleSetting = () => {
+        console.log('Setting');
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.heading}>User Profile</Text>
-                <TouchableOpacity onPress={handleEditProfile} style={styles.editButton}>
-                    <Text style={styles.editButtonText}>Edit</Text>
+                <Text style={styles.heading}>Profile</Text>
+                <TouchableOpacity onPress={handleSetting}>
+                    <Image source={require('../../assets/settings.png')} style={styles.notificationIcon} />
                 </TouchableOpacity>
             </View>
             <View style={styles.profileInfo}>
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/150' }} // Placeholder image URL
-                    style={styles.profileImage}
-                />
-                <Text style={styles.label}>Name:</Text>
+                <View style={styles.propic}>
+                    <Image
+                        source={require('../../assets/images/user.png')} // Placeholder image URL
+                        style={styles.profileImage}
+                    />
+                    <View style={styles.Details}>
+                        <View style={styles.ulstyle}>
+                            <Text style={styles.upper}>29</Text>
+                            <Text style={styles.lower}>Recipes</Text>
+                        </View>
+                        <View style={styles.ulstyle}>
+                            <Text style={styles.upper}>144</Text>
+                            <Text style={styles.lower}>Followers</Text>
+                        </View>
+                        <View style={styles.ulstyle}>
+                            <Text style={styles.upper}>306</Text>
+                            <Text style={styles.lower}>Following</Text>
+                        </View>
+                    </View>
+                </View>
                 <Text style={styles.value}>Vedant</Text>
-                <Text style={styles.label}>Email:</Text>
-                <Text style={styles.value}>vedantsuthar2002@gmail.com</Text>
-                <Text style={styles.label}>Bio:</Text>
-                <Text style={styles.value}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
+                <CustomButton text={'Manage Profile'} type={'TERTIARY'} bgColor={'#FFF5E6'} fgColor={'#FB9400'} onPress={handleEditProfile} />
             </View>
             <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
                 <Text style={styles.logoutButtonText}>Logout</Text>
@@ -52,8 +69,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        color: '#0F172A',
+        fontSize: 18,
+        fontWeight: '600',
+        paddingVertical: 10,
+        paddingLeft: 5,
     },
     editButton: {
         padding: 10,
@@ -65,14 +85,23 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     profileInfo: {
-        alignItems: 'center',
         marginBottom: 20,
     },
     profileImage: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
         marginBottom: 10,
+    },
+    propic: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    Details: {
+        flexDirection: 'row',
+        width: '75%',
+        justifyContent: 'space-between',
     },
     label: {
         fontSize: 18,
@@ -80,8 +109,11 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     value: {
+        color: '#0F172A',
+        fontWeight: '600',
         fontSize: 16,
         marginBottom: 15,
+        paddingLeft: 10,
     },
     logoutButton: {
         padding: 15,
@@ -92,6 +124,23 @@ const styles = StyleSheet.create({
     logoutButtonText: {
         color: '#ffffff',
         fontSize: 16,
+    },
+    notificationIcon: {
+        height: 24,
+        width: 24
+    },
+    ulstyle: {
+    },
+    upper: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#0F172A',
+        alignSelf: 'center',
+    },
+    lower: {
+        fontSize: 14,
+        fontWeight: '400',
+        color: '#9CA3AF',
     },
 });
 

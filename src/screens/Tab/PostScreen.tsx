@@ -11,6 +11,7 @@ const PostScreen = () => {
     const [portion, setPortion] = useState('');
     const [time, setTime] = useState('');
     const [ingredients, setIngredients] = useState([{ name: '' }]);
+    const [recipePhoto, setRecipePhoto] = useState<string | null>(null);
 
     const resetRecipe = () => {
         setDishName('');
@@ -18,19 +19,16 @@ const PostScreen = () => {
         setPortion('');
         setTime('');
         setIngredients([{ name: '' }]);
+        setRecipePhoto(null);
     };
 
     const saveRecipe = async () => {
         try {
-            // Open SQLite database
             const db = await SQLite.openDatabase({ name: 'RecipesDB' });
-
-            // Insert recipe data into the 'FavoriteRecipes' table
             await db.executeSql(
-                'INSERT INTO FavoriteRecipes (recipeName, description, portion, time, ingredients) VALUES (?, ?, ?, ?, ?)',
-                [dishName, description, portion, time, JSON.stringify(ingredients)]
+                'INSERT INTO FavoriteRecipes (recipeName, description, portion, time, ingredients, recipePhoto) VALUES (?, ?, ?, ?, ?, ?)',
+                [dishName, description, portion, time, JSON.stringify(ingredients), recipePhoto]
             );
-
             console.log('Recipe saved successfully!');
             resetRecipe();
         } catch (error) {
@@ -41,27 +39,29 @@ const PostScreen = () => {
     const onAddIng = () => {
         const data = [...ingredients];
         data.push({ name: '' });
-        console.log('data', data);
         setIngredients(data);
     };
 
     const onDeleteIngredients = (index: number) => {
-        console.log("del===", index);
         const updatedIngredients = [...ingredients];
         updatedIngredients.splice(index, 1);
         setIngredients(updatedIngredients);
     };
+
     const onHandle = (text: string, index: number) => {
         const updatedIngredients = [...ingredients];
-        console.log(" ----", updatedIngredients, index, text);
         updatedIngredients[index].name = text;
         setIngredients(updatedIngredients);
     };
+
     const onEndEditing = (text: string, index: number) => {
         const updatedIngredients = [...ingredients];
-        console.log(" ----", updatedIngredients, index, text);
         updatedIngredients[index].name = text;
         setIngredients(updatedIngredients);
+    };
+
+    const onPhotoSelect = (base64Image: string) => {
+        setRecipePhoto(base64Image);
     };
 
     return (
@@ -81,19 +81,18 @@ const PostScreen = () => {
                 <Text style={styles.heading}>
                     Recipe photo
                 </Text>
-                {/* ImagePickerModel */}
-                <ImagePickerModel />
+                <ImagePickerModel onPhotoSelect={onPhotoSelect} />
                 <View style={styles.TiPo}>
                     <Text style={styles.heading}>
                         Portion
                     </Text>
-                    <TextInput style={styles.TiPoInput} placeholder='2 people' value={portion} onChangeText={setPortion} placeholderTextColor={'#000'}></TextInput>
+                    <TextInput style={styles.TiPoInput} placeholder='2 people' value={portion} onChangeText={setPortion} placeholderTextColor={'#9CA3AF'}></TextInput>
                 </View>
                 <View style={styles.TiPo}>
                     <Text style={styles.heading}>
                         Cooking time
                     </Text>
-                    <TextInput style={styles.TiPoInput} placeholder='1 hr 30 min' value={time} onChangeText={setTime} placeholderTextColor={'#000'}></TextInput>
+                    <TextInput style={styles.TiPoInput} placeholder='1 hr 30 min' value={time} onChangeText={setTime} placeholderTextColor={'#9CA3AF'}></TextInput>
                 </View>
                 <Text style={styles.heading}>Ingredients</Text>
                 <IngredientsList ingredients={ingredients} onPressAdd={() => onAddIng()} onPressDelete={(index) => onDeleteIngredients(index)} onHandle={(text, index) => onHandle(text, index)} onEndEditing={(text, index) => onEndEditing(text, index)} />
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
     TiPoInput: {
         backgroundColor: '#FFF',
         width: '50%',
-        borderColor: '#000',
+        borderColor: '#9CA3AF',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
@@ -160,4 +159,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
 export default PostScreen;

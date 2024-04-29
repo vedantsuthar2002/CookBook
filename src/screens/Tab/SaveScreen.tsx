@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Image, TextInput, StatusBar, TouchableOpacity } from 'react-native';
 import SQLite from 'react-native-sqlite-storage';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import Emoji from 'react-native-emoji';
 
 const SaveScreen: React.FC = () => {
     const [favoriteRecipes, setFavoriteRecipes] = useState<any[]>([]);
@@ -59,9 +60,17 @@ const SaveScreen: React.FC = () => {
             ) : (
                 <ScrollView contentContainerStyle={styles.filteredRecipesContainer} showsVerticalScrollIndicator={false}>
                     {favoriteRecipes.map((recipe, index) => (
-                        <TouchableOpacity key={recipe.recipeId} style={[styles.recipeItem, index % 2 !== 0 && { marginLeft: 10 }]} onPress={() => handleRecipePress(recipe.recipeId)}>
+                        <TouchableOpacity key={recipe.recipeId} style={[styles.recipeItem, styles.shadowprop, index % 2 !== 0 && { marginLeft: 10 }]} onPress={() => handleRecipePress(recipe.recipeId)}>
                             <Image source={{ uri: recipe.imageUrl }} style={styles.recipeImage} />
-                            <Text style={styles.recipeName}>{recipe.recipeName}</Text>
+                            <Text numberOfLines={2} style={styles.recipeName}>{recipe.recipeName}</Text>
+                            <View style={styles.saveName}>
+                                <Text style={styles.star}>
+                                    <Emoji name='star' style={styles.starIcon} /> (4.5)
+                                </Text>
+                                <Text style={styles.star}>
+                                    <Emoji name='clock330' style={styles.starIcon} /> 30 min
+                                </Text>
+                            </View>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -73,7 +82,9 @@ const SaveScreen: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 18,
+        paddingRight: 15,
+        paddingTop: 15,
+        paddingLeft: 15,
         backgroundColor: '#FFF',
     },
     header: {
@@ -87,7 +98,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3F4F6',
         padding: 10,
         borderRadius: 8,
-        marginBottom: 20,
+        marginBottom: 15,
     },
     filteredRecipesContainer: {
         flexDirection: 'row',
@@ -97,8 +108,14 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     recipeItem: {
+        borderRadius: 10,
         width: '48%',
-        marginBottom: 10,
+        marginBottom: 15,
+        backgroundColor: '#fff',
+    },
+    shadowprop: {
+        shadowColor: '#000',
+        elevation: 3,
     },
     recipeImage: {
         width: '95%',
@@ -115,8 +132,21 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         color: '#000',
-        paddingLeft: 10,
+        paddingLeft: 5,
         marginBottom: 10,
+    },
+    saveName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 5,
+        marginBottom: 15
+    },
+    star: {
+        fontSize: 12
+    },
+    starIcon: {
+        marginRight: 20,
     },
 
 });

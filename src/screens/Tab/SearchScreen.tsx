@@ -151,6 +151,7 @@ const SearchScreen: React.FC = () => {
 
     const handleClearText = () => {
         setSearchTerm('');
+        console.log(searchTerm);
     };
 
     const handleRecentPress = (item: Meal) => {
@@ -175,7 +176,7 @@ const SearchScreen: React.FC = () => {
                         onChangeText={searchMealByName}
                     />
                     {(searchTerm !== '') ? (
-                        <TouchableOpacity onPress={handleClearText}>
+                        <TouchableOpacity onPress={() => handleClearText()} style={styles.iconbg}>
                             <Image source={require('../../assets/close.png')} style={styles.icon} />
                         </TouchableOpacity>
                     ) : (
@@ -203,7 +204,7 @@ const SearchScreen: React.FC = () => {
                 )}
                 {/* Recent Search */}
                 <View style={styles.recentContainer}>
-                    <Text style={styles.recentText}>Search history</Text>
+                    <Text style={styles.recentText}>Last Search</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         {recentSearches.slice(Math.max(recentSearches.length - MAX_SEARCH_HISTORY, 0)).map((search, index) => (
                             <TouchableOpacity key={index} style={styles.recentItem} onPress={() => searchMealByName(search.strMeal)}>
@@ -219,13 +220,17 @@ const SearchScreen: React.FC = () => {
                     <Text style={styles.recentText}>Recently Opened</Text>
                     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.filteredRecipesContainer}>
                         {recentlyOpened.map((recipe, index) => (
-                            <TouchableOpacity key={index} style={[styles.caregotyRecipeItemContainer, index % 2 !== 0 && { marginLeft: 10 }]} onPress={() => handleRecentPress(recipe)}>
+                            <TouchableOpacity key={index} style={[styles.caregotyRecipeItemContainer, styles.shadowprop, index % 2 !== 0 && { marginLeft: 10 }]} onPress={() => handleRecentPress(recipe)}>
                                 <Image source={{ uri: recipe.strMealThumb }} style={styles.recentItemImage} />
                                 <View style={styles.randomRecipeDetails}>
                                     <Text numberOfLines={2} style={styles.recentItemText}>{recipe.strMeal}</Text>
-                                    <View style={styles.recipeInfo}>
-                                        <Text style={styles.recipeInfoText}>Portion: 4</Text>
-                                        <Text style={styles.recipeInfoText}><Emoji name='clock330' />: 30 mins</Text>
+                                    <View style={styles.saveName}>
+                                        <Text style={styles.star}>
+                                            <Emoji name='star' style={styles.starIcon} /> (4.5)
+                                        </Text>
+                                        <Text style={styles.star}>
+                                            <Emoji name='clock330' style={styles.starIcon} /> 30 min
+                                        </Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
@@ -250,16 +255,16 @@ const styles = StyleSheet.create({
     search: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        marginVertical: 20,
+        marginVertical: 10,
         width: '100%',
         alignItems: 'center',
+        backgroundColor: '#F3F4F6',
+        borderRadius: 8,
     },
     searchinput: {
-        backgroundColor: '#F3F4F6',
         padding: 16,
-        borderRadius: 8,
         height: 53,
-        width: '100%',
+        width: '80%',
     },
     touchsearch: {
         position: 'absolute',
@@ -270,18 +275,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     searchlogo: {
-        right: 35,
+        right: 20,
         position: 'relative',
         height: 20,
         width: 20,
         alignItems: "center",
     },
+    iconbg: {
+        width: "20%",
+        alignItems: "center",
+    },
     icon: {
-        right: 35,
-        position: 'relative',
         height: 20,
         width: 20,
-        alignItems: "center",
     },
     dropdownContainer: {
         position: 'absolute',
@@ -330,8 +336,14 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     caregotyRecipeItemContainer: {
+        borderRadius: 10,
         width: '48%',
         marginBottom: 10,
+        backgroundColor: '#fff',
+    },
+    shadowprop: {
+        shadowColor: '#000',
+        elevation: 3,
     },
     recentItemImage: {
         width: '95%',
@@ -345,8 +357,8 @@ const styles = StyleSheet.create({
     },
     recentItemText: {
         fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
+        fontWeight: '600',
+        color: '#0F172A',
     },
     recipeInfo: {
         flexDirection: 'column',
@@ -366,6 +378,19 @@ const styles = StyleSheet.create({
     randomRecipeDetails: {
         marginVertical: 10,
         paddingHorizontal: 5,
+    },
+    saveName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 5,
+        marginBottom: 15
+    },
+    star: {
+        fontSize: 12
+    },
+    starIcon: {
+        marginRight: 20,
     },
 });
 
