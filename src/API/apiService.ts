@@ -26,11 +26,9 @@ const apiService = {
 
     lookupMealById: async (id: string) => {
         try {
-            // Fetch recipe details by ID
             const response = await axios.get(`${BASE_URL}/lookup.php?i=${id}`);
             const recipeDetails = response.data.meals ? response.data.meals[0] : null;
 
-            // Store idMeal in AsyncStorage
             if (recipeDetails) {
                 await AsyncStorage.setItem('idMeal', id);
             }
